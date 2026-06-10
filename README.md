@@ -30,3 +30,5 @@ A Flask-based AI Resume Analyzer that evaluates resumes, generates ATS scores, a
 ```bash
 pip install -r requirements.txt
 python app.py
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://ai-resume-analyzer-lzwp.onrender.com/)
