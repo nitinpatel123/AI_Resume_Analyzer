@@ -1,5 +1,5 @@
+[🚀 Click here to view Live Project](https://ai-resume-analyzer-lzwp.onrender.com/)
 # AI Resume Analyzer 🤖
-
 A Flask-based AI Resume Analyzer that evaluates resumes, generates ATS scores, and provides smart improvement suggestions using NLP techniques.
 
 ---
@@ -29,6 +29,3 @@ A Flask-based AI Resume Analyzer that evaluates resumes, generates ATS scores, a
 
 ```bash
 pip install -r requirements.txt
-python app.py
-
-[🚀 Click here to view Live Project](https://ai-resume-analyzer-lzwp.onrender.com/)
