@@ -1,0 +1,7 @@
+uploads/
+__pycache__/
+*.pyc
+resumes.db
+static/graph.png
+.vscode/
+.conda/

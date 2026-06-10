@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resume Comparison Dashboard</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI', Arial;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color:white;
+}
+
+/* CONTAINER */
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    text-align:center;
+    padding:30px 15px;
+}
+
+/* TITLE */
+h1{
+    color:#38bdf8;
+    margin-bottom:20px;
+}
+
+/* TABLE WRAPPER */
+.table-wrapper{
+    overflow-x:auto;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:rgba(30,41,59,0.85);
+    backdrop-filter:blur(10px);
+    border-radius:15px;
+    overflow:hidden;
+}
+
+th{
+    background:linear-gradient(135deg,#2563eb,#38bdf8);
+    padding:15px;
+    color:white;
+}
+
+td{
+    padding:15px;
+    border-bottom:1px solid #334155;
+}
+
+tr:hover{
+    background:#1e293b;
+}
+
+/* SCORE */
+.score{
+    font-size:22px;
+    color:#22c55e;
+    font-weight:bold;
+}
+
+/* WINNER CARD */
+.card{
+    margin-top:25px;
+    background:rgba(30,41,59,0.85);
+    backdrop-filter:blur(10px);
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(56,189,248,0.15);
+}
+
+/* WINNER */
+.winner{
+    font-size:28px;
+    color:#22c55e;
+    font-weight:bold;
+    text-shadow:0 0 15px rgba(34,197,94,0.5);
+}
+
+/* BADGES */
+.badge{
+    padding:6px 12px;
+    border-radius:10px;
+    background:#0ea5e9;
+    display:inline-block;
+    margin:5px;
+    font-size:13px;
+}
+
+/* AI BOX */
+.ai-box{
+    margin-top:25px;
+    background:rgba(15,23,42,0.9);
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #38bdf8;
+}
+
+/* SKILL GRID */
+.skill-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:20px;
+}
+
+.skill-box{
+    background:#1e293b;
+    padding:15px;
+    border-radius:12px;
+    text-align:left;
+}
+
+.green{
+    border-left:5px solid #22c55e;
+}
+
+.red{
+    border-left:5px solid #ef4444;
+}
+
+/* BUTTONS */
+.buttons{
+    margin-top:25px;
+}
+
+.btn{
+    display:inline-block;
+    margin:5px;
+    padding:12px 20px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+}
+
+.logout{
+    background:#dc2626;
+}
+
+.logout:hover{
+    background:#b91c1c;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+    .skill-grid{
+        grid-template-columns:1fr;
+    }
+
+    .winner{
+        font-size:22px;
+    }
+
+    table{
+        min-width:600px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⚔️ Resume Comparison Dashboard (AI + ML Enhanced)</h1>
+
+<!-- TABLE -->
+<div class="table-wrapper">
+
+<table>
+
+<tr>
+    <th>Resume</th>
+    <th>ATS Score</th>
+    <th>AI Score</th>
+    <th>Matched Skills</th>
+</tr>
+
+<tr>
+    <td>{{ file1 }}</td>
+    <td class="score">{{ score1 }}%</td>
+    <td class="score">{{ ai_score1 }}%</td>
+    <td>{{ matched1|length }}</td>
+</tr>
+
+<tr>
+    <td>{{ file2 }}</td>
+    <td class="score">{{ score2 }}%</td>
+    <td class="score">{{ ai_score2 }}%</td>
+    <td>{{ matched2|length }}</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- WINNER -->
+<div class="card">
+
+<h2 class="winner">
+🏆 Winner: {{ winner }}
+</h2>
+
+<p style="margin-top:10px;">
+Decision based on:
+<span class="badge">ATS Score</span>
+<span class="badge">AI Score</span>
+<span class="badge">Skill Matching</span>
+<span class="badge">ML Similarity</span>
+</p>
+
+</div>
+
+<!-- AI INSIGHT -->
+<div class="ai-box">
+
+<h3>🤖 AI Comparison Insight</h3>
+
+<p style="margin-top:10px;">
+This comparison is generated using
+TF-IDF + Cosine Similarity +
+Skill Extraction + ATS Scoring Engine.
+</p>
+
+<br>
+
+<p>
+<b>Recommendation:</b>
+Improve missing skills in lower scored resume
+for better placement chances.
+</p>
+
+</div>
+
+<!-- SKILLS -->
+<div class="skill-grid">
+
+<div class="skill-box green">
+
+<h3>🟢 Resume 1 Skills</h3>
+
+<p>
+Matched Skills:
+{{ matched1|join(', ') if matched1 else 'No Skills Found' }}
+</p>
+
+</div>
+
+<div class="skill-box red">
+
+<h3>🔴 Resume 2 Skills</h3>
+
+<p>
+Matched Skills:
+{{ matched2|join(', ') if matched2 else 'No Skills Found' }}
+</p>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+<div class="buttons">
+
+<a href="/" class="btn">
+🏠 Home
+</a>
+
+<a href="/" class="btn">
+🔁 Compare Again
+</a>
+
+<a href="/logout" class="btn logout">
+🚪 Logout
+</a>
+
+</div>
+
+</div>
+
+</body>
+</html>

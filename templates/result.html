@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ATS Resume Report</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI', Arial;
+    background:radial-gradient(circle at top,#0f172a,#020617);
+    color:white;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:rgba(30,41,59,0.85);
+    padding:30px;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+h1,h2,h3{
+    color:#38bdf8;
+}
+
+.role-box{
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.score-box{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.score-card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.score{
+    font-size:32px;
+    font-weight:bold;
+    color:#22c55e;
+}
+
+.badge{
+    background:gold;
+    color:black;
+    padding:6px 12px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:20px;
+}
+
+.box{
+    padding:15px;
+    border-radius:12px;
+}
+
+.green{
+    background:#14532d;
+}
+
+.red{
+    background:#7f1d1d;
+}
+
+.section{
+    background:#1e293b;
+    padding:15px;
+    border-radius:12px;
+    margin-top:20px;
+}
+
+.ml-box{
+    margin-top:20px;
+    padding:20px;
+    border:1px solid #38bdf8;
+    border-radius:15px;
+    text-align:center;
+}
+
+.ml-score{
+    font-size:30px;
+    color:#22c55e;
+    font-weight:bold;
+}
+
+.actions{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+}
+
+.btn{
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    color:white;
+    background:#2563eb;
+}
+
+.download{
+    background:#16a34a;
+}
+
+.graph{
+    max-width:100%;
+    height:auto;
+    display:block;
+    margin:auto;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width:768px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .score-box{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        text-align:center;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    .role-box{
+        font-size:18px;
+    }
+
+    .score{
+        font-size:26px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>📊 ATS Resume Analysis Report</h1>
+
+<div class="role-box">
+💼 Predicted Role : {{ role }}
+</div>
+
+<h3>📈 Resume Graph</h3>
+
+<img
+class="graph"
+src="{{ url_for('static', filename='graph.png') }}"
+alt="Graph"
+>
+
+<div class="score-box">
+
+<div class="score-card">
+<h3>ATS Score</h3>
+<div class="score">{{ ats_score }}</div>
+</div>
+
+<div class="score-card">
+<h3>Resume Score</h3>
+<div class="score">{{ resume_score }}</div>
+</div>
+
+<div class="score-card">
+<h3>AI Score</h3>
+<div class="score">{{ ai_score }}</div>
+</div>
+
+<div class="score-card">
+<h3>Level</h3>
+<span class="badge">{{ level }}</span>
+</div>
+
+</div>
+
+{% if match_score and match_score > 0 %}
+<div class="ml-box">
+<h3>🤖 Resume–Job Match Score</h3>
+<div class="ml-score">
+{{ match_score }}%
+</div>
+</div>
+{% endif %}
+
+<div class="grid">
+
+<div class="box green">
+<h3>✅ Matched Skills</h3>
+
+<ul>
+{% for skill in matched %}
+<li>{{ skill }}</li>
+{% else %}
+<li>No matched skills</li>
+{% endfor %}
+</ul>
+
+</div>
+
+<div class="box red">
+<h3>❌ Missing Skills</h3>
+
+<ul>
+{% for skill in missing %}
+<li>{{ skill }}</li>
+{% else %}
+<li>No missing skills 🎉</li>
+{% endfor %}
+</ul>
+
+</div>
+
+</div>
+
+<div class="section">
+<h3>🧠 Job-Based Missing Skills</h3>
+
+<ul>
+{% for skill in missing_skills %}
+<li>❌ {{ skill }}</li>
+{% else %}
+<li>No job description gaps 🎉</li>
+{% endfor %}
+</ul>
+
+</div>
+
+<div class="section">
+<h3>💡 Suggestions</h3>
+<p>{{ suggestions }}</p>
+</div>
+
+<div class="section">
+<h3>🤖 AI Feedback</h3>
+
+<ul>
+{% for item in feedback %}
+<li>{{ item }}</li>
+{% else %}
+<li>No feedback available</li>
+{% endfor %}
+</ul>
+
+</div>
+
+<div class="actions">
+<a href="/" class="btn">🔙 Analyze Another Resume</a>
+<a href="/report" class="btn download">📄 Download Report</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

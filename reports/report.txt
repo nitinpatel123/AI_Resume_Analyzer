@@ -1,0 +1,14 @@
+ATS RESUME ANALYSIS REPORT
+
+ATS SCORE: 70
+RESUME SCORE: 83
+LEVEL: 🔥 Excellent
+
+MATCHED SKILLS:
+python, java, sql, html, css, javascript, flask, machine learning, data science, numpy, pandas, git
+
+MISSING SKILLS:
+c++, django, excel, power bi, github
+
+SUGGESTIONS:
+Great resume! Add more projects.
