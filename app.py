@@ -4,13 +4,15 @@ matplotlib.use('Agg')  # Fix: Server pe GUI nahi hota, yeh zaroori hai
 import matplotlib.pyplot as plt
 import os
 import pdfplumber
-import sqlite3
+import psycopg2
 import re
+from datetime import timedelta
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey123")
+app.permanent_session_lifetime = timedelta(days=30)  # Session 30 din tak rahegi
 
 UPLOAD_FOLDER = "uploads"
 REPORT_FOLDER = "reports"
@@ -20,15 +22,20 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(REPORT_FOLDER, exist_ok=True)
 os.makedirs(STATIC_FOLDER, exist_ok=True)
 
-# ---------------- DATABASE ----------------
+# ---------------- DATABASE CONNECTION ----------------
+
+def get_db():
+    return psycopg2.connect(os.environ.get("DATABASE_URL"))
+
+# ---------------- DATABASE INIT ----------------
 
 def init_db():
-    conn = sqlite3.connect("resumes.db")
+    conn = get_db()
     c = conn.cursor()
 
     c.execute("""
         CREATE TABLE IF NOT EXISTS resumes(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             filename TEXT,
             ats_score INTEGER,
             resume_score INTEGER,
@@ -39,7 +46,7 @@ def init_db():
 
     c.execute("""
         CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             username TEXT UNIQUE,
             password TEXT
         )
@@ -53,13 +60,13 @@ init_db()
 # ---------------- SAVE TO DB ----------------
 
 def save_to_db(filename, ats, resume, level, role):
-    conn = sqlite3.connect("resumes.db")
+    conn = get_db()
     c = conn.cursor()
 
     c.execute("""
         INSERT INTO resumes
         (filename, ats_score, resume_score, level, role)
-        VALUES(?,?,?,?,?)
+        VALUES(%s,%s,%s,%s,%s)
     """, (filename, ats, resume, level, role))
 
     conn.commit()
@@ -160,19 +167,20 @@ def register():
         username = request.form["username"]
         password = generate_password_hash(request.form["password"])
 
-        conn = sqlite3.connect("resumes.db")
+        conn = get_db()
         c = conn.cursor()
 
         try:
             c.execute(
-                "INSERT INTO users(username,password) VALUES(?,?)",
+                "INSERT INTO users(username,password) VALUES(%s,%s)",
                 (username, password)
             )
             conn.commit()
             flash("Registration Successful! Please login.")
             return redirect("/login")
 
-        except sqlite3.IntegrityError:
+        except psycopg2.errors.UniqueViolation:
+            conn.rollback()
             return "User Already Exists. <a href='/register'>Try Again</a>"
 
         finally:
@@ -188,16 +196,17 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("resumes.db")
+        conn = get_db()
         c = conn.cursor()
         c.execute(
-            "SELECT password FROM users WHERE username=?",
+            "SELECT password FROM users WHERE username=%s",
             (username,)
         )
         user = c.fetchone()
         conn.close()
 
         if user and check_password_hash(user[0], password):
+            session.permanent = True   # Session 30 din tak save rahegi
             session["user"] = username
             return redirect("/home")
 
@@ -270,7 +279,7 @@ def history():
     if "user" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("resumes.db")
+    conn = get_db()
     c = conn.cursor()
     c.execute("SELECT * FROM resumes ORDER BY id DESC")
     data = c.fetchall()

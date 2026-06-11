@@ -3,3 +3,4 @@ gunicorn
 matplotlib
 pdfplumber
 pandas
+psycopg2-binary
