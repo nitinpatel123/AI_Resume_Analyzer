@@ -1,128 +1,381 @@
 /* =========================
-   MICRO INTERACTIONS PACK
+   DESIGN SYSTEM
 ========================= */
-
-/* Smooth selection */
-::selection {
-    background: rgba(56,189,248,0.3);
-    color: white;
-}
-
-/* Smooth focus visibility (accessibility upgrade) */
-:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
+:root {
+    --bg: #0a0f1e;
+    --surface: rgba(255,255,255,0.05);
+    --surface-2: rgba(255,255,255,0.08);
+    --primary: #38bdf8;
+    --primary-dark: #2563eb;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --shadow: 0 12px 35px rgba(0,0,0,0.45);
 }
 
 /* =========================
-   GLASS ENHANCED EFFECT
+   RESET
 ========================= */
-.glass {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
 }
 
-/* =========================
-   SKELETON LOADER (PRO UX)
-========================= */
-.skeleton {
-    background: linear-gradient(
-        90deg,
-        rgba(255,255,255,0.05),
-        rgba(255,255,255,0.12),
-        rgba(255,255,255,0.05)
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* =========================
-   BADGES (MODERN UI ELEMENT)
-========================= */
-.badge {
-    display: inline-block;
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 999px;
-    background: rgba(56,189,248,0.1);
-    color: var(--primary);
-    border: 1px solid rgba(56,189,248,0.2);
-}
-
-/* =========================
-   MODAL STYLE (FOR FUTURE FEATURES)
-========================= */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-}
-
-.modal-content {
-    width: 90%;
-    max-width: 500px;
-    padding: 20px;
-    border-radius: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    animation: fadeUp 0.3s ease;
-}
-
-/* =========================
-   HOVER LIFT GLOBAL CLASS
-========================= */
-.lift {
-    transition: 0.3s ease;
-}
-
-.lift:hover {
-    transform: translateY(-6px);
-}
-
-/* =========================
-   PREMIUM SCROLL EFFECT
-========================= */
 html {
     scroll-behavior: smooth;
 }
 
-/* smooth scrollbar upgrade */
-::-webkit-scrollbar {
-    width: 8px;
+body {
+    background: radial-gradient(circle at top, #0f172a, var(--bg));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--primary), var(--primary-dark));
-    border-radius: 20px;
+/* Animated background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(56,189,248,0.08), transparent 60%);
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(56,189,248,0.08), transparent 40%),
+                radial-gradient(circle at 80% 30%, rgba(168,85,247,0.06), transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(34,197,94,0.05), transparent 50%);
+    animation: floatBG 10s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes floatBG {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-20px); }
 }
 
 /* =========================
-   DARK UI DEPTH ENHANCEMENT
+   TOP BAR
 ========================= */
-.depth {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: rgba(2,6,23,0.6);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-bar h2 {
+    color: var(--primary);
+    font-weight: 800;
 }
 
 /* =========================
-   FLOAT ANIMATION ELEMENTS
+   NAV
 ========================= */
-.float {
-    animation: float 3s ease-in-out infinite;
+.nav-links {
+    display: flex;
+    gap: 14px;
 }
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0px); }
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: 0.25s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+    background: rgba(56,189,248,0.1);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero {
+    text-align: center;
+    margin: 80px 0 50px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #38bdf8, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 18px;
+    margin-top: 12px;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin: 20px 0;
+    backdrop-filter: blur(18px);
+    transition: all 0.3s ease;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow);
+    border-color: rgba(56,189,248,0.25);
+}
+
+/* Card glow border */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(56,189,248,0.3), transparent);
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+                  linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* =========================
+   INPUTS
+========================= */
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(2,6,23,0.7);
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+}
+
+/* =========================
+   BUTTON
+========================= */
+button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(56,189,248,0.25);
+}
+
+button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+/* =========================
+   FEATURES
+========================= */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.feature:hover {
+    transform: translateY(-8px);
+    border-color: rgba(56,189,248,0.3);
+}
+
+/* =========================
+   SCORE
+========================= */
+.score-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+}
+
+.progress {
+    height: 14px;
+    background: #1e293b;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+}
+
+/* =========================
+   TABLE
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+th {
+    background: rgba(56,189,248,0.15);
+    color: var(--primary);
+    padding: 14px;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* =========================
+   GRID
+========================= */
+.history-grid,
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+/* =========================
+   ALERTS
+========================= */
+.success {
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: #22c55e;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.error {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #ef4444;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* =========================
+   LOADER
+========================= */
+.loader {
+    width: 45px;
+    height: 45px;
+    border: 4px solid #1e293b;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+    text-align: center;
+    margin-top: 60px;
+    padding: 25px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .top-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
 }
